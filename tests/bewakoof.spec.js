@@ -1,6 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 import loginPage from '../modules/login-page';
+import addToCart from '../modules/add-to-cart';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('https://www.bewakoof.com/');
@@ -57,7 +58,8 @@ test.describe('Going through Collections', () => {
         const men = await page.locator("//a[.='Men']");
         await men.click();
         await expect(page).toHaveURL('https://www.bewakoof.com/campaign/mens-home');
-    
+        
+        await page.keyboard.press('PageDown');
         const tshirt = await page.locator("//img[@alt='Printed t shirts']");
         // await tshirt.scrollIntoViewIfNeeded();
         await page.mouse.wheel(0, 1000);
@@ -67,7 +69,7 @@ test.describe('Going through Collections', () => {
         await page.mouse.wheel(0, 1000);
         await page.waitForTimeout(5000);
         for (let i = 0; i < 10; i++){
-            await page.keyboard.press('ArrowDown');
+            await page.keyboard.press('PageDown');
         }
         await page.waitForTimeout(5000);
         await page.goBack();
@@ -96,9 +98,7 @@ test.describe('Going through Collections', () => {
         await expect(page).toHaveURL('https://www.bewakoof.com/oversized-t-shirts-for-men?manufacturer_brand=bewakoof%C2%AE_bewakoof__air%C2%AE__1.0');
         await page.mouse.wheel(0, 1000);
         await page.waitForTimeout(5000);
-        for (let i = 0; i < 10; i++){
-            await page.keyboard.press('ArrowDown');
-        }
+        await page.keyboard.press('PageDown');
         await page.waitForTimeout(5000);
         await page.goBack();
         await expect(page).toHaveURL('https://www.bewakoof.com/campaign/mens-home');
@@ -112,6 +112,7 @@ test.describe('Going through Collections', () => {
 
         await expect(page).toHaveURL('https://www.bewakoof.com/campaign/womens-home');
 
+        await page.keyboard.press('PageDown');
         const bshirt = await page.locator("//img[@alt='Boyfriend T Shirts']");
         await page.mouse.wheel(0, 1000);
         await bshirt.click();
@@ -120,7 +121,7 @@ test.describe('Going through Collections', () => {
         await page.mouse.wheel(0, 1000);
         await page.waitForTimeout(5000);
         for (let i = 0; i < 10; i++){
-            await page.keyboard.press('ArrowDown');
+            await page.keyboard.press('PageDown');
         }
         await page.waitForTimeout(5000);
         await page.goBack();
@@ -149,7 +150,7 @@ test.describe('Going through Collections', () => {
         await page.mouse.wheel(0, 1000);
         await page.waitForTimeout(5000);
         for (let i = 0; i < 10; i++){
-            await page.keyboard.press('ArrowDown');
+            await page.keyboard.press('PageDown');
         }
         await page.waitForTimeout(5000);
         await page.goBack();
@@ -170,10 +171,8 @@ test.describe('Add product to cart', () => {
         await page.waitForURL('https://www.bewakoof.com/p/mens-pink-oversized-hoodies-13-men');
         await page.locator("//span[.='M']").click();
 
-        await page.locator("//span[.='ADD TO BAG']").click();
-        const bag = page.locator("//span[@class='cartCount']");
-        await bag.click();
-        await page.waitForTimeout(5000);
+        const add_cart = new addToCart(page);
+        await add_cart.addCart();
         
     });
 
@@ -189,10 +188,8 @@ test.describe('Add product to cart', () => {
 
         await page.locator("//span[.='M']").click();
 
-        await page.locator("//span[.='ADD TO BAG']").click();
-        const bag = page.locator("//span[@class='cartCount']");
-        await bag.click();
-        await page.waitForTimeout(5000);
+        const add_cart = new addToCart(page);
+        await add_cart.addCart();
     });
 
     test('Add NewArrivals to Cart', async({page}) => {
@@ -207,10 +204,8 @@ test.describe('Add product to cart', () => {
 
         await page.locator("//span[.='M']").click();
 
-        await page.locator("//span[.='ADD TO BAG']").click();
-        const bag = page.locator("//span[@class='cartCount']");
-        await bag.click();
-        await page.waitForTimeout(5000);
+        const add_cart = new addToCart(page);
+        await add_cart.addCart();
     });
 });
 
@@ -227,10 +222,8 @@ test.describe('Deleting Cart Item', () => {
         await page.waitForURL('https://www.bewakoof.com/p/mens-pink-oversized-hoodies-13-men');
         await page.locator("//span[.='M']").click();
 
-        await page.locator("//span[.='ADD TO BAG']").click();
-        const bag = page.locator("//span[@class='cartCount']");
-        await bag.click();
-        await page.waitForTimeout(5000);
+        const add_cart = new addToCart(page);
+        await add_cart.addCart();
 
         await page.locator("//div[@id='testRemoveCart']").click();
         await page.waitForTimeout(5000);
@@ -248,10 +241,8 @@ test.describe('Deleting Cart Item', () => {
 
         await page.locator("//span[.='M']").click();
 
-        await page.locator("//span[.='ADD TO BAG']").click();
-        const bag = page.locator("//span[@class='cartCount']");
-        await bag.click();
-        await page.waitForTimeout(5000);
+        const add_cart = new addToCart(page);
+        await add_cart.addCart();
 
         await page.locator("//div[@id='testRemoveCart']").click();
         await page.waitForTimeout(5000);
@@ -269,10 +260,8 @@ test.describe('Deleting Cart Item', () => {
 
         await page.locator("//span[.='M']").click();
 
-        await page.locator("//span[.='ADD TO BAG']").click();
-        const bag = page.locator("//span[@class='cartCount']");
-        await bag.click();
-        await page.waitForTimeout(5000);
+        const add_cart = new addToCart(page);
+        await add_cart.addCart();
 
         await page.locator("//div[@id='testRemoveCart']").click();
         await page.waitForTimeout(5000);
