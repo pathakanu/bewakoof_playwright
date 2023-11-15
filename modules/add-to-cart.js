@@ -6,7 +6,7 @@ class addToCart{
         await this.page.locator("//span[.='ADD TO BAG']").click();
         const bag = this.page.locator("//span[@class='cartCount']");
         await bag.click();
-        await this.page.waitForTimeout(5000);
+        await this.page.waitForTimeout(2000);
     }
 }
 
