@@ -1,9 +1,9 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
-import loginPage from '../modules/login-page';
-import addToCart from '../modules/add-to-cart';
-import Scroll from '../modules/scroll';
-import Search from '../modules/search';
+import loginPage from '../pages/login-page';
+import addToCart from '../pages/add-to-cart';
+import Scroll from '../pages/scroll';
+import Search from '../pages/search';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('https://www.bewakoof.com/');
@@ -15,16 +15,9 @@ test.describe('Login to Bewakoof', () => {
     });
 
     test('Login with Email', async({page}) => {
-        await page.waitForURL('https://www.bewakoof.com/');
-        await page.locator("[id='loginLink']").click();
-
-        await page.locator("[id='web_email_login']").click();
-        await page.waitForURL("https://www.bewakoof.com/login/email");
 
         const login_Page = new loginPage(page);
         await login_Page.login("pathak.anurag@tftus.com","Anurag123@");
-        await page.locator("[class='close_popup_target icon_close']").click();
-        await page.locator("[class='icon_user']").hover();
         const logout = await page.locator("[id='web_logout']").isVisible();
         expect(logout).toBe(true);
     });
