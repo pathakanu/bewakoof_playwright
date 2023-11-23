@@ -4,9 +4,11 @@ import loginPage from '../pages/login-page';
 import addToCart from '../pages/add-to-cart';
 import Scroll from '../pages/scroll';
 import Search from '../pages/search';
+import Size from '../pages/size-select';
+import scrapPage from '../pages/scrapingPage';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('https://www.bewakoof.com/');
+  await page.goto('/');
 });
 
 test.describe('Login to Bewakoof', () => {
@@ -45,95 +47,13 @@ test.describe('Login to Bewakoof', () => {
 
 test.describe('Going through Collections', () => {
     test('Going through mens collections', async ({ page }) => {
-
-        await page.waitForURL('https://www.bewakoof.com/');
-
-        const men = await page.locator("//a[.='Men']");
-        await men.click();
-        await expect(page).toHaveURL('https://www.bewakoof.com/campaign/mens-home');
-        const scroll = new Scroll(page);
-
-        scroll.scroll(1);
-        const tshirt = await page.locator("//img[@alt='Printed t shirts']");
-        scroll.scroll(2);
-        await tshirt.click();
-
-        await page.waitForURL('https://www.bewakoof.com/men-printed-tshirts?manufacturer_brand=bewakoof%C2%AE_bewakoof__air%C2%AE__1.0');
-        await page.mouse.wheel(0, 1000);
-        await page.waitForTimeout(1000);
-        scroll.scroll(4);
-        await page.waitForTimeout(1000);
-        await page.goBack();
-        await page.waitForTimeout(1000);
-
-        const fshirt = await page.locator("//img[@alt='Full Sleeve Tshirts']");
-        scroll.scroll(1);
-        await fshirt.click();
-
-        await page.waitForURL('https://www.bewakoof.com/men-full-sleeve-t-shirts?manufacturer_brand=bewakoof%C2%AE');
-        scroll.scroll(3);
-        await page.waitForTimeout(1000);
-        await page.goBack();
-        await page.waitForTimeout(1000);
-        await expect(page).toHaveURL('https://www.bewakoof.com/campaign/mens-home');
-
-        const oshirt = await page.locator("//img[@alt='Oversized T- Shirts']");
-        // await tshirt.scrollIntoViewIfNeeded();
-        scroll.scroll(1);
-        await oshirt.click();
-        await expect(page).toHaveURL('https://www.bewakoof.com/oversized-t-shirts-for-men?manufacturer_brand=bewakoof%C2%AE_bewakoof__air%C2%AE__1.0');
-        await page.mouse.wheel(0, 1000);
-        await page.waitForTimeout(1000);
-        scroll.scroll(1);
-        await page.waitForTimeout(1000);
-        await page.goBack();
-        await expect(page).toHaveURL('https://www.bewakoof.com/campaign/mens-home');
+        const Scrap = new scrapPage(page);
+        await Scrap.scrap('Men');     
     });
     
     test('Going through womens collections', async ({page}) => {
-        const scroll = new Scroll(page);
-        await page.waitForURL('https://www.bewakoof.com/');
-
-        const women = await page.locator("//a[.='Women']");
-        await women.click();
-
-        await expect(page).toHaveURL('https://www.bewakoof.com/campaign/womens-home');
-
-        scroll.scroll(1);
-        const bshirt = await page.locator("//img[@alt='Boyfriend T Shirts']");
-        await page.mouse.wheel(0, 1000);
-        await bshirt.click();
-
-        await page.waitForURL('https://www.bewakoof.com/women-boyfriend-tshirts?manufacturer_brand=bewakoof%C2%AE_bewakoof__air%C2%AE__1.0');
-        await page.mouse.wheel(0, 1000);
-        await page.waitForTimeout(1000);
-        scroll.scroll(4);
-        await page.waitForTimeout(1000);
-        await page.goBack();
-        await page.waitForTimeout(1000);
-
-        const fshirt = await page.locator("//img[@alt='Printed T-shirt']");
-        // await tshirt.scrollIntoViewIfNeeded();
-        await page.mouse.wheel(0, 1000);
-        await fshirt.click();
-
-        await page.waitForURL('https://www.bewakoof.com/women-printed-t-shirts?manufacturer_brand=bewakoof%C2%AE_bewakoof__air%C2%AE__1.0');
-        scroll.scroll(1);
-        await page.waitForTimeout(1000);
-        await page.goBack();
-        await expect(page).toHaveURL('https://www.bewakoof.com/campaign/womens-home');
-
-        const oshirt = await page.locator("//img[@alt='Oversized T- Shirts']");
-        // await tshirt.scrollIntoViewIfNeeded();
-        await page.mouse.wheel(0, 1000);
-        await oshirt.click();
-        await page.waitForURL('https://www.bewakoof.com/oversized-t-shirts-for-women?manufacturer_brand=bewakoof%C2%AE_bewakoof__air%C2%AE__1.0');
-        await page.mouse.wheel(0, 1000);
-        await page.waitForTimeout(1000);
-        scroll.scroll(3);
-        await page.waitForTimeout(1000);
-        await page.goBack();
-        await expect(page).toHaveURL('https://www.bewakoof.com/campaign/womens-home');
+        const Scrap = new scrapPage(page);
+        await Scrap.scrap('Women'); 
     });
 });
 
@@ -147,7 +67,10 @@ test.describe('Add product to cart', () => {
 
         const item = await page.locator("div.plp-product-card:nth-child(2) a");
         await item.click();
-        await page.locator("//span[.='XL']").click();
+        const size_select = new Size(page);
+        const n = await size_select.select();
+
+        await size_select.click(n);
 
         const add_cart = new addToCart(page);
         await add_cart.addCart();
@@ -164,7 +87,10 @@ test.describe('Add product to cart', () => {
         await page.locator("div.plp-product-card:nth-child(2) a").click();
         await page.waitForTimeout(1000);
 
-        await page.locator("//span[.='XL']").click();
+        const size_select = new Size(page);
+        const n = await size_select.select();
+
+        await size_select.click(n);
 
         const add_cart = new addToCart(page);
         await add_cart.addCart();
@@ -180,7 +106,10 @@ test.describe('Add product to cart', () => {
         await page.locator("div.plp-product-card:nth-child(2) a").click();
         await page.waitForTimeout(1000);
 
-        await page.locator("//span[.='XL']").click();
+        const size_select = new Size(page);
+        const n = await size_select.select();
+
+        await size_select.click(n);
 
         const add_cart = new addToCart(page);
         await add_cart.addCart();
@@ -189,8 +118,6 @@ test.describe('Add product to cart', () => {
 
 test.describe('Deleting Cart Item', () => {
     test('Add a winterwear and delete', async({page}) => {
-        await page.waitForURL('https://www.bewakoof.com/');
-
         const p_path = await page.locator("//img[@alt='Winterwearimage']");
         await p_path.click();
         await page.waitForTimeout(1000);
@@ -207,8 +134,6 @@ test.describe('Deleting Cart Item', () => {
     });
 
     test('Add Bestseller to cart and delete', async({page}) => {
-        await page.waitForURL('https://www.bewakoof.com/');
-
         await page.locator("//img[@alt='Bestsellersimage']").click();
         await page.waitForTimeout(1000);
         await page.waitForURL("https://www.bewakoof.com/bestseller?sort=new");
@@ -226,8 +151,6 @@ test.describe('Deleting Cart Item', () => {
     });
 
     test('Add newarrivals to cart and delete', async({page}) => {
-        await page.waitForURL('https://www.bewakoof.com/');
-
         await page.locator("//img[@alt='New Arrivalsimage']").click();
         await page.waitForTimeout(1000);
         await page.waitForURL("https://www.bewakoof.com/new-arrivals?sort=new");
@@ -247,13 +170,57 @@ test.describe('Deleting Cart Item', () => {
 
 test.describe('Searching a product', () =>{
     test('Searching a jacket', async({page}) => {
-        await page.waitForURL('https://www.bewakoof.com/');
-
         const search = new Search(page);
         const scroll = new Scroll(page);
         search.search_q("jacket", 3);
         await page.waitForTimeout(5000);
         scroll.scroll(2);
         await page.waitForTimeout(5000);
+    });
+});
+
+test.describe('Verify product by api', () =>{
+    test('Add to Cart', async({page}) =>{
+        await page.locator("//img[@alt='New Arrivalsimage']").click();
+        await page.waitForTimeout(1000);
+        await page.waitForURL("https://www.bewakoof.com/new-arrivals?sort=new");
+
+        await page.locator("div.plp-product-card:nth-child(2) a").click();
+        await page.waitForTimeout(1000);
+        page.on('request',async data => {
+            // const post_data = data.();
+            // console.log(post_data);
+            // console.log(data.url());
+            // console.log(data.method());
+            if(data.url().includes("carts") && data.method() == 'POST'){
+                const postResponse = await data.postData();
+                console.log(JSON.stringify(postResponse));
+            }
+            // console.log(data.url());
+        });
+
+        const product_name = await page.textContent("[id='testProName']");
+        await page.locator("//span[.='XL']").click();
+        await page.locator("//span[.='ADD TO BAG']").click();
+        // await page.waitForTimeout(5000);
+        await page.waitForLoadState('domcontentloaded');
+		await page.waitForLoadState('networkidle');
+
+        // const response = await page.waitForResponse(request => {
+        //     return request.method() === 'POST' && request.url() === '/api/posts';
+        //   });
+
+        // const response = await page.waitForResponse(response => response.url().includes('/carts/') && response.status() === 200);
+        //     console.log('RESPONSE ' + (await response.body()));
+
+        // const route_assert = await page.route('https://www.bewakoof.com/v1/carts/*', async route =>{
+        //     const response = await route.fetch();
+        //     console.log("here",response);
+        //     const json = await response.json();
+        //     console.log(json);
+        //     // return json;
+        // });
+
+        // console.log(route_assert);
     });
 });

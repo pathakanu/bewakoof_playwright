@@ -1,4 +1,4 @@
-import loginSelector from "../selectors/selector_login";
+import loginSelector from "../pageobjects/selector_login";
 class loginPage{
     constructor(page){
         this.page=page;
